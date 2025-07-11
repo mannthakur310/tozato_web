@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    margin: 5px;
+}
+.container .form-select{
+    margin-right: 40px;
+    padding: 0;
+    padding-left: 3px;
+}
