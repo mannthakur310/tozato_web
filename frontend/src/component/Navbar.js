@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
 import Modal from "../Modal";
 import Cart from "./screen/Cart";
@@ -8,9 +8,24 @@ import { toast } from "react-toastify";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handelLogout = () => {
     localStorage.removeItem("authToken");
-    navigate("/");
+    localStorage.removeItem("userEmail");
+    window.dispatchEvent(new Event("authChange"));
+    navigate('/', { replace: true, state: { timestamp: Date.now() } });
     toast.warning("Login to Order", {
       position: "top-center",
       autoClose: 1500,
@@ -20,100 +35,155 @@ function Navbar() {
       draggable: true,
       progress: undefined,
       theme: "light",
-      // transition: Bounce,
     });
   };
+
   let data = useCart();
   const [cartView, setcartView] = useState(false);
+
+  const isActive = (path) => location.pathname === path;
+
   return (
     <>
-      <nav className="navbar  navbar-expand-lg navbar-light bg-warning color:black">
-        <div className="container-fluid">
-          <Link className="navbar-brand fs-4 fst-italic fw-bolder" to="/">
-            GoFooD
+      <nav className={`navbar navbar-expand-lg fixed-top transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-white shadow-lg backdrop-blur-md bg-opacity-95' 
+          : 'bg-transparent'
+      }`}>
+        <div className="container">
+          <Link 
+            className="navbar-brand d-flex align-items-center animate-fade-in-left" 
+            to="/"
+            style={{
+              fontSize: '1.8rem',
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: ' rgba(255, 107, 53, 0.9)',
+              textDecoration: 'none'
+            }}
+          >
+            <span className="me-2 animate-pulse">🍕</span>
+            ToZaTo
           </Link>
+
           <button
-            className="navbar-toggler"
+            className={`navbar-toggler border-0 ${isMobileMenuOpen ? 'collapsed' : ''}`}
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-expanded={isMobileMenuOpen}
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav me-auto">
-              <li className="nav-item ">
+
+          <div className={`collapse navbar-collapse ${isMobileMenuOpen ? 'show' : ''}`} id="navbarNav">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
                 <Link
-                  className="nav-link active fs-6 fw-normal "
-                  aria-current="page"
+                  className={`nav-link position-relative ${isActive('/') ? 'active' : ''}`}
                   to="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Home
+                  <span className="d-flex align-items-center">
+                    <i className="bi bi-house-door me-1"></i>
+                    Home
+                  </span>
+                  {isActive('/') && (
+                    <span className="position-absolute bottom-0 start-0 w-100 h-2 bg-primary rounded" 
+                          style={{background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'}}></span>
+                  )}
                 </Link>
               </li>
-              {localStorage.getItem("authToken") ? (
-                <li className="nav-item ">
+              
+              {localStorage.getItem("authToken") && (
+                <li className="nav-item">
                   <Link
-                    className="nav-link fs-6 text-dark fw-normal"
-                    aria-current="page"
+                    className={`nav-link position-relative ${isActive('/myorder') ? 'active' : ''}`}
                     to="/myorder"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    My Orders
+                    <span className="d-flex align-items-center">
+                      <i className="bi bi-list-ul me-1"></i>
+                      My Orders
+                    </span>
+                    {isActive('/myorder') && (
+                      <span className="position-absolute bottom-0 start-0 w-100 h-2 bg-primary rounded" 
+                            style={{background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'}}></span>
+                    )}
                   </Link>
                 </li>
-              ) : (
-                ""
               )}
             </ul>
-            {!localStorage.getItem("authToken") ? (
-              <div className="d-flex">
-                <Link
-                  className="btn btn-light text-primary me-2"
-                  type="button"
-                  to="/signup"
-                >
-                  Signup
-                </Link>
-                <Link
-                  className="btn btn-light text-primary"
-                  type="button"
-                  to="/login"
-                >
-                  Login
-                </Link>
-              </div>
-            ) : (
-              <div className="d-flex">
-                <button
-                  className="btn btn-light text-success me-2"
-                  type="button"
-                  onClick={(e) => setcartView(true)}
-                >
-                  My Cart{" "}
-                  <Badge pill bg="danger">
-                    {data.length}
-                  </Badge>
-                </button>
-                {cartView ? (
-                  <Modal onClose={(e) => setcartView(false)}>
-                    <Cart />
-                  </Modal>
-                ) : (null)}
-                <button
-                  className="btn btn-light text-danger"
-                  type="button"
-                  onClick={handelLogout}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+
+            <div className="d-flex align-items-center gap-2 animate-fade-in-right">
+              {!localStorage.getItem("authToken") ? (
+                <>
+                  <Link
+                    className="btn btn-outline-primary hover-lift"
+                    to="/signup"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <i className="bi bi-person-plus me-1"></i>
+                    Signup
+                  </Link>
+                  <Link
+                    className="btn btn-primary hover-lift"
+                    to="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <i className="bi bi-box-arrow-in-right me-1"></i>
+                    Login
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="btn btn-success hover-lift position-relative"
+                    onClick={(e) => {
+                      setcartView(true);
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <i className="bi bi-cart3 me-1"></i>
+                    My Cart
+                    {data.length > 0 && (
+                      <Badge 
+                        pill 
+                        bg="danger" 
+                        className="position-absolute top-0 start-100 translate-middle animate-bounce"
+                        style={{fontSize: '0.7rem'}}
+                      >
+                        {data.length}
+                      </Badge>
+                    )}
+                  </button>
+                  
+                  {cartView && (
+                    <Modal onClose={(e) => setcartView(false)}>
+                      <Cart onClose={() => setcartView(false)} />
+                    </Modal>
+                  )}
+                  
+                  <button
+                    className="btn btn-outline-danger hover-lift"
+                    onClick={() => {
+                      handelLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <i className="bi bi-box-arrow-right me-1"></i>
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </nav> 
+      </nav>
+      
+      {/* Spacer to prevent content from hiding under fixed navbar */}
+      <div style={{ height: '80px' }}></div>
     </>
   );
 }

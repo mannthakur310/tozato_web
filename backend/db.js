@@ -1,12 +1,13 @@
 const mongoose=require('mongoose')
 const { MongoClient } = require("mongodb");
 require('dotenv').config()
-// const mongoURI =
-//   "mongodb+srv://mannpratap310:putinbaba1@cluster0.73movqa.mongodb.net/gofoodmern?retryWrites=true&w=majority&appName=Cluster0"; //question mark se before database ka name 
+
+// Fallback connection string if environment variable is not available
+const mongoURI = process.env.mongoURI || "mongodb+srv://mannpratap310:putinbaba1@cluster0.73movqa.mongodb.net/gofoodmern?retryWrites=true&w=majority&appName=Cluster0";
 
   const connnectDB = async () => {
     try {
-      await mongoose.connect(process.env.mongoURI, {
+      await mongoose.connect(mongoURI, {
         bufferCommands: false, // Set to false to avoid buffering commands
       });
       console.log('MongoDB connected');
@@ -24,8 +25,9 @@ require('dotenv').config()
   const collectionName2= "food_category";
 
   async function fetchData() {
-  const client =  new MongoClient(process.env.mongoURI);
+  const client =  new MongoClient(mongoURI);
     try {
+      console.log("Fetching data from MongoDB...");
       const db = client.db(dbName);
       const collection1 = db.collection(collectionName1);
       const collection2 = db.collection(collectionName2);
@@ -33,10 +35,18 @@ require('dotenv').config()
       const data1 = await collection1.find().toArray();
       const data2 = await collection2.find().toArray();
 
+      console.log("Food data fetched:", data1.length, "items");
+      console.log("Food categories fetched:", data2.length, "items");
+
       global.food_data= data1;
       global.food_category=data2;
+      
+      console.log("Global variables set successfully");
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching data:", error);
+      // Initialize with empty arrays if there's an error
+      global.food_data = [];
+      global.food_category = [];
     } finally {
       await client.close();
     }

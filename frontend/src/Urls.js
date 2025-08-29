@@ -1,1 +1,1 @@
-export const baseurl=`https://gofood-bkend-5sey.onrender.com`;
+export const baseurl=`http://localhost:5000`;
