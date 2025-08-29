@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 require('dotenv').config()
 
 // Fallback connection string if environment variable is not available
-const mongoURI = process.env.mongoURI || "mongodb+srv://mannpratap310:putinbaba1@cluster0.73movqa.mongodb.net/gofoodmern?retryWrites=true&w=majority&appName=Cluster0";
+const mongoURI = process.env.mongoURI;
 
   const connnectDB = async () => {
     try {
