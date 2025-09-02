@@ -1,0 +1,20 @@
+# node modules and cache
+node_modules/
+.cache/
+/.gitmodules
+
+# system files
+.DS_Store
+Thumbs.db 
+
+# build folders (if using tools like Vite or React)
+dist/
+build/
+
+# log files
+*.log
+
+# sensitive files
+.env
+node_modules/ 
+.cache/ 
