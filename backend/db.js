@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 require('dotenv').config()
 
 // Connection string (uses .env if set, falls back to local dev)
-const mongoURI = process.env.mongoURI || 'mongodb://127.0.0.1:27017/foodapp';
+const mongoURI = process.env.mongoURI;
 
   const connnectDB = async () => {
     try {
