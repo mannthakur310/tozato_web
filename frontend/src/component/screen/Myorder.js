@@ -249,55 +249,57 @@ function Myorder() {
                                             </div>
                                         </div>
 
-                                        {dayOrders.map((order, orderIndex) => {
-                                            const status = getOrderStatus(order.orderStatus, order.orderDate);
-                                            
-                                            return (
-                                                <div key={order.orderId} className="order-card animate-fade-in-up hover-lift">
-                                                    <div className="order-header">
-                                                        <div className="order-info">
-                                                            <div className="order-time">
-                                                                <i className="bi bi-clock me-1"></i>
-                                                                {formatDate(order.orderDate)}
+                                        <div className="order-cards-column">
+                                            {dayOrders.map((order, orderIndex) => {
+                                                const status = getOrderStatus(order.orderStatus, order.orderDate);
+                                                
+                                                return (
+                                                    <div key={order.orderId} className="order-card animate-fade-in-up hover-lift">
+                                                        <div className="order-header">
+                                                            <div className="order-info">
+                                                                <div className="order-time">
+                                                                    <i className="bi bi-clock me-1"></i>
+                                                                    {formatDate(order.orderDate)}
+                                                                </div>
+                                                                <div className="order-total">
+                                                                    <i className="bi bi-currency-rupee me-1"></i>
+                                                                    Total: ₹{order.totalAmount?.toFixed(2) || '0'}
+                                                                </div>
                                                             </div>
-                                                            <div className="order-total">
-                                                                <i className="bi bi-currency-rupee me-1"></i>
-                                                                Total: ₹{order.totalAmount?.toFixed(2) || '0'}
+                                                            <div className="order-status-badge">
+                                                                <span className={`status-${status.color}`}>
+                                                                    <i className="bi bi-circle-fill me-1"></i>
+                                                                    {status.status}
+                                                                </span>
                                                             </div>
                                                         </div>
-                                                        <div className="order-status-badge">
-                                                            <span className={`status-${status.color}`}>
-                                                                <i className="bi bi-circle-fill me-1"></i>
-                                                                {status.status}
-                                                            </span>
-                                                        </div>
-                                                    </div>
 
-                                                    <div className="order-items">
-                                                        {order.items.map((item, itemIndex) => (
-                                                            <div key={itemIndex} className="order-item">
-                                                                <div className="item-info">
-                                                                    <h6 className="item-name">{item.name}</h6>
-                                                                    <div className="item-details">
-                                                                        <span className="item-quantity">
-                                                                            <i className="bi bi-hash me-1"></i>
-                                                                            Qty: {item.qty}
-                                                                        </span>
-                                                                        <span className="item-size">
-                                                                            <i className="bi bi-arrows-angle-expand me-1"></i>
-                                                                            Size: {item.size}
-                                                                        </span>
+                                                        <div className="order-items">
+                                                            {order.items.map((item, itemIndex) => (
+                                                                <div key={itemIndex} className="order-item">
+                                                                    <div className="item-info">
+                                                                        <h6 className="item-name">{item.name}</h6>
+                                                                        <div className="item-details">
+                                                                            <span className="item-quantity">
+                                                                                <i className="bi bi-hash me-1"></i>
+                                                                                Qty: {item.qty}
+                                                                            </span>
+                                                                            <span className="item-size">
+                                                                                <i className="bi bi-arrows-angle-expand me-1"></i>
+                                                                                Size: {item.size}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="item-price">
+                                                                        ₹{item.price?.toFixed(2) || '0'}
                                                                     </div>
                                                                 </div>
-                                                                <div className="item-price">
-                                                                    ₹{item.price?.toFixed(2) || '0'}
-                                                                </div>
-                                                            </div>
-                                                        ))}
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
+                                                );
+                                            })}
+                                        </div>
                                     </div>
                                 );
                             })}

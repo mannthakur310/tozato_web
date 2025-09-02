@@ -272,6 +272,27 @@ p {
   transform: scale(1.05);
 }
 
+/* Navbar link hover underline effect (no persistent orange border) */
+.navbar .nav-link {
+  position: relative;
+}
+
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+
+.navbar .nav-link:hover::after,
+.navbar .nav-link:focus::after {
+  width: 100%;
+}
+
 /* Responsive Utilities */
 @media (max-width: 768px) {
   .container {
@@ -332,10 +353,17 @@ p {
   background: var(--secondary-color);
 }
 
-/* Focus styles for accessibility */
-*:focus {
+/* Focus styles for accessibility (show only for keyboard navigation) */
+*:focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 2px;
+}
+
+/* Remove focus outline on click for navbar links and buttons */
+.navbar .nav-link:focus,
+.btn:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* Selection styles */

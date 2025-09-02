@@ -49,7 +49,7 @@ function Navbar() {
         isScrolled 
           ? 'bg-white shadow-lg backdrop-blur-md bg-opacity-95' 
           : 'bg-transparent'
-      }`}>
+      }`} role="navigation" aria-label="Main navigation">
         <div className="container">
           <Link 
             className="navbar-brand d-flex align-items-center animate-fade-in-left" 
@@ -89,10 +89,6 @@ function Navbar() {
                     <i className="bi bi-house-door me-1"></i>
                     Home
                   </span>
-                  {isActive('/') && (
-                    <span className="position-absolute bottom-0 start-0 w-100 h-2 bg-primary rounded" 
-                          style={{background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'}}></span>
-                  )}
                 </Link>
               </li>
               
@@ -107,10 +103,6 @@ function Navbar() {
                       <i className="bi bi-list-ul me-1"></i>
                       My Orders
                     </span>
-                    {isActive('/myorder') && (
-                      <span className="position-absolute bottom-0 start-0 w-100 h-2 bg-primary rounded" 
-                            style={{background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))'}}></span>
-                    )}
                   </Link>
                 </li>
               )}
@@ -144,6 +136,9 @@ function Navbar() {
                       setcartView(true);
                       setIsMobileMenuOpen(false);
                     }}
+                    aria-haspopup="dialog"
+                    aria-expanded={cartView}
+                    aria-controls="cart-root"
                   >
                     <i className="bi bi-cart3 me-1"></i>
                     My Cart
@@ -171,6 +166,7 @@ function Navbar() {
                       handelLogout();
                       setIsMobileMenuOpen(false);
                     }}
+                    aria-label="Logout"
                   >
                     <i className="bi bi-box-arrow-right me-1"></i>
                     Logout

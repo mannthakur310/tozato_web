@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { toast } from 'react-toastify';
 import './PaymentModal.css';
 
@@ -126,7 +127,7 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, onPaymentSuccess }) => {
 
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <div className="payment-modal-overlay">
       <div className="payment-modal">
         <div className="payment-modal-header">
@@ -312,7 +313,8 @@ const PaymentModal = ({ isOpen, onClose, totalAmount, onPaymentSuccess }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.getElementById('cart-root')
   );
 };
 

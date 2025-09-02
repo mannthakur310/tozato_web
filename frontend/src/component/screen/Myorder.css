@@ -154,10 +154,7 @@
 }
 
 .order-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  align-items: start;
+  display: block;
 }
 
 /* Order Date Section */
@@ -444,11 +441,14 @@
 }
 
 /* Responsive Design */
+.order-cards-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 @media (max-width: 1200px) {
-  .order-group {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
-  }
+  /* no-op for column layout */
 }
 
 @media (max-width: 768px) {
@@ -468,10 +468,7 @@
     padding: 1rem;
   }
   
-  .order-group {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.75rem;
-  }
+  .order-cards-column { gap: 0.75rem; }
   
   .order-item-content {
     padding: 0.75rem;
