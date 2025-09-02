@@ -75,23 +75,6 @@ npm start
 
 The React application will open and run on http://localhost:3000.
 
-🏗️ Project Structure
-The project is organized as a monorepo with two main folders:
-
-my-app/
-├── backend/         # Contains the Node.js/Express API
-│   ├── model/
-│   ├── router/
-│   ├── .env         # (Private) Environment variables
-│   ├── db.js
-│   └── index.js
-├── frontend/        # Contains the React application
-│   ├── public/
-│   └── src/
-├── .gitignore
-├── vercel.json      # Vercel deployment configuration
-└── README.md
-
 🌐 Deployment
 This application is configured for easy deployment on Vercel. The vercel.json file in the root directory handles the build process and routing for both the frontend and backend.
 
