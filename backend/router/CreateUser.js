@@ -1,84 +1,172 @@
+// const express = require("express");
+// const User = require("../model/User");
+// const router = express.Router();
+// const { body, validationResult } = require("express-validator");
+// const bcrypt=require('bcrypt');
+// const jwt=require('jsonwebtoken');
+// require("dotenv").config()
+
+// router.post(
+//   "/createuser",
+//   body("email", "Invalid email").isEmail(),
+//   body("password", "Invalid password").isLength({ min: 6 }),
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+//     //used to encrypt the password
+//     const salt=await bcrypt.genSalt(10);
+//     const secpassword=await bcrypt.hash(req.body.password,salt);
+//     try {
+//       await User.create({
+//         name: req.body.name,
+//         email: req.body.email.toLowerCase(),
+//         password: secpassword ,
+//         location: req.body.location,
+//       });
+//       res.json({
+//         success: true,
+//       });
+//     } catch (error) {
+//       console.error(error);
+//       res.json({
+//         success: false,
+//       });
+//     }
+//   }
+// );
+
+// router.post(
+//   "/loginuser",
+//   body("email", "Invalid email").isEmail(),
+//   body("name").optional().isLength({ min: 6 }),
+//   body("password", "Invalid password").isLength({ min: 6 }),
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
+//     let email = req.body.email.toLowerCase();
+//     try {
+//       let userData = await User.findOne({email});
+//       if (!userData) {
+//         return res
+//           .status(400)
+//           .json({ error: "try to login with correct email" });
+//       }
+//       const pwdcompare=await bcrypt.compare(req.body.password,userData.password)
+//       if (!pwdcompare ) {
+//         return res
+//           .status(400)
+//           .json({ error: "try to login with correct password" });
+//       }
+//       //jwt authentication
+//       const data={
+//         user:{
+//           id:userData.id
+//         }
+//       }
+//       const authToken=jwt.sign(data,process.env.SECRET_KEY)
+//       return res.json({ success: true,authToken:authToken});
+//     } catch (error) {
+//       console.error(error);
+//       res.json({
+//         success: false,
+//       });
+//     }
+//   }
+// );
+
+// module.exports = router;
+
+
 const express = require("express");
 const User = require("../model/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-const bcrypt=require('bcrypt');
-const jwt=require('jsonwebtoken');
-require("dotenv").config()
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
+// Ensure SECRET_KEY is loaded before starting
+if (!process.env.SECRET_KEY) {
+  console.error("FATAL ERROR: SECRET_KEY is not defined in .env file");
+  process.exit(1); // Exit the process if the key is missing
+}
+
+// ROUTE 1: Create a new user at /api/createuser
 router.post(
   "/createuser",
   body("email", "Invalid email").isEmail(),
-  body("password", "Invalid password").isLength({ min: 6 }),
+  body("password", "Password must be at least 6 characters").isLength({ min: 6 }),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    //used to encrypt the password
-    const salt=await bcrypt.genSalt(10);
-    const secpassword=await bcrypt.hash(req.body.password,salt);
+
     try {
+      const salt = await bcrypt.genSalt(10);
+      const secpassword = await bcrypt.hash(req.body.password, salt);
+
       await User.create({
         name: req.body.name,
-        email: req.body.email.toLowerCase(),
-        password: secpassword ,
+        email: req.body.email.toLowerCase(), // <-- FIX: Store email in lowercase
+        password: secpassword,
         location: req.body.location,
       });
-      res.json({
-        success: true,
-      });
+
+      res.json({ success: true });
     } catch (error) {
-      console.error(error);
-      res.json({
-        success: false,
-      });
+      console.error(error.message);
+      // FIX: Handle duplicate email error specifically
+      if (error.code === 11000) {
+        return res.status(400).json({ success: false, error: "An account with this email already exists." });
+      }
+      res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }
 );
 
+// ROUTE 2: Login an existing user at /api/loginuser
 router.post(
   "/loginuser",
   body("email", "Invalid email").isEmail(),
-  body("name").optional().isLength({ min: 6 }),
-  body("password", "Invalid password").isLength({ min: 6 }),
+  body("password", "Password cannot be blank").exists(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
+
     let email = req.body.email.toLowerCase();
     try {
-      let userData = await User.findOne({email});
+      let userData = await User.findOne({ email });
       if (!userData) {
-        return res
-          .status(400)
-          .json({ error: "try to login with correct email" });
+        return res.status(400).json({ success: false, error: "Invalid credentials. Please try again." });
       }
-      const pwdcompare=await bcrypt.compare(req.body.password,userData.password)
-      if (!pwdcompare ) {
-        return res
-          .status(400)
-          .json({ error: "try to login with correct password" });
+
+      const pwdcompare = await bcrypt.compare(req.body.password, userData.password);
+      if (!pwdcompare) {
+        return res.status(400).json({ success: false, error: "Invalid credentials. Please try again." });
       }
-      //jwt authentication
-      const data={
-        user:{
-          id:userData.id
-        }
-      }
-      const authToken=jwt.sign(data,process.env.SECRET_KEY)
-      return res.json({ success: true,authToken:authToken});
+
+      const data = {
+        user: {
+          id: userData.id,
+        },
+      };
+
+      // IMPROVEMENT: Add expiration to the token
+      const authToken = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+      return res.json({ success: true, authToken: authToken });
     } catch (error) {
-      console.error(error);
-      res.json({
-        success: false,
-      });
+      console.error(error.message);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
     }
   }
 );
 
 module.exports = router;
-
-
-
