@@ -1,7 +1,7 @@
 Full-Stack Web Application (React + Node.js)
 This is a complete full-stack web application built with a modern technology stack. It features a responsive frontend created with React and a robust backend API powered by Node.js, Express, and MongoDB. The application is configured for seamless deployment on Vercel.
 
-Live Demo Link Deployed with Vercel ▲
+Live Demo Link: https://gofood-one.vercel.app/
 
 ✨ Features
 User Authentication: Secure user registration and login functionality using JWT (JSON Web Tokens).
