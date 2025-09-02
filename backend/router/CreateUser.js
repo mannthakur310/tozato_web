@@ -29,7 +29,7 @@ router.post(
         success: true,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.json({
         success: false,
       });
@@ -70,7 +70,7 @@ router.post(
       const authToken=jwt.sign(data,process.env.SECRETKEY)
       return res.json({ success: true,authToken:authToken});
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.json({
         success: false,
       });
@@ -79,3 +79,6 @@ router.post(
 );
 
 module.exports = router;
+
+
+
