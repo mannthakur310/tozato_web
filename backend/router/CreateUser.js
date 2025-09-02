@@ -21,7 +21,7 @@ router.post(
     try {
       await User.create({
         name: req.body.name,
-        email: req.body.email,
+        email: req.body.email.toLowerCase(),
         password: secpassword ,
         location: req.body.location,
       });
@@ -67,7 +67,7 @@ router.post(
           id:userData.id
         }
       }
-      const authToken=jwt.sign(data,process.env.SECRETKEY)
+      const authToken=jwt.sign(data,process.env.SECRET_KEY)
       return res.json({ success: true,authToken:authToken});
     } catch (error) {
       console.error(error);
