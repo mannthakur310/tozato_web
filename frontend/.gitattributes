@@ -1,0 +1,15 @@
+# Set the default behavior to automatically handle text files and enforce Unix-style line endings (LF).
+# This is the most important rule for cross-platform compatibility.
+* text=auto eol=lf
+
+# Explicitly mark shell scripts as text with Unix line endings and make them executable.
+*.sh eol=lf executable
+
+# Ensure common web files have consistent Unix-style line endings.
+*.js       eol=lf
+*.json     eol=lf
+*.css      eol=lf
+*.html     eol=lf
+*.md       eol=lf
+*.svg      eol=lf
+*.yml      eol=lf
