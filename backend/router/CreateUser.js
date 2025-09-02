@@ -47,7 +47,7 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    let email = req.body.email;
+    let email = req.body.email.toLowerCase();
     try {
       let userData = await User.findOne({email});
       if (!userData) {
@@ -55,7 +55,7 @@ router.post(
           .status(400)
           .json({ error: "try to login with correct email" });
       }
-      const pwdcompare=bcrypt.compare(req.body.password,userData.password)
+      const pwdcompare=await bcrypt.compare(req.body.password,userData.password)
       if (!pwdcompare ) {
         return res
           .status(400)

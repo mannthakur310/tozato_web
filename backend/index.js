@@ -29,6 +29,6 @@ app.use('/api', require('./router/DisplayData'));
 app.use('/api', require('./router/OrderDetail'));
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`app is running on port ${port}`)
 });
 
