@@ -2,15 +2,15 @@ const mongoose=require('mongoose')
 const { MongoClient } = require("mongodb");
 require('dotenv').config()
 
-// Fallback connection string if environment variable is not available
-const mongoURI = process.env.mongoURI;
+// Connection string (uses .env if set, falls back to local dev)
+const mongoURI = process.env.mongoURI || 'mongodb://127.0.0.1:27017/foodapp';
 
   const connnectDB = async () => {
     try {
       await mongoose.connect(mongoURI, {
         bufferCommands: false, // Set to false to avoid buffering commands
       });
-      console.log('MongoDB connected');
+      console.info('MongoDB connected');
     } catch (err) {
       console.error('Error connecting to MongoDB', err);
       process.exit(1); 
@@ -27,7 +27,7 @@ const mongoURI = process.env.mongoURI;
   async function fetchData() {
   const client =  new MongoClient(mongoURI);
     try {
-      console.log("Fetching data from MongoDB...");
+      
       const db = client.db(dbName);
       const collection1 = db.collection(collectionName1);
       const collection2 = db.collection(collectionName2);
@@ -35,13 +35,12 @@ const mongoURI = process.env.mongoURI;
       const data1 = await collection1.find().toArray();
       const data2 = await collection2.find().toArray();
 
-      console.log("Food data fetched:", data1.length, "items");
-      console.log("Food categories fetched:", data2.length, "items");
-
+      
+      
       global.food_data= data1;
       global.food_category=data2;
       
-      console.log("Global variables set successfully");
+      
     } catch (error) {
       console.error("Error fetching data:", error);
       // Initialize with empty arrays if there's an error
@@ -56,3 +55,5 @@ const mongoURI = process.env.mongoURI;
 };
 
 module.exports = mongo;
+
+
