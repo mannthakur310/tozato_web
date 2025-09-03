@@ -45,7 +45,8 @@ app.use('/api', require('./router/CreateUser'));
 app.use('/api', require('./router/DisplayData'));
 app.use('/api', require('./router/OrderDetail'));
 
-app.listen(port, () => {
-  console.log(`app is running on port ${port}`)
-});
+// app.listen(port, () => {
+//   console.log(`app is running on port ${port}`)
+// });
 
+module.exports = app;
