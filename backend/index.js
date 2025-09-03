@@ -6,6 +6,8 @@ const port = process.env.PORT || 5000
 const mongo=require("./db");
 mongo();
 
+
+console.log("Backend server starting up...");
 const allowedOrigins = [
   'http://localhost:3000',   // For local development
   'https://gofood-one.vercel.app/'   // IMPORTANT: Replace with your actual Vercel URL
