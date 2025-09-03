@@ -3,16 +3,16 @@ const router = express.Router();
 
 router.post('/foodData',(req,res)=>{
     try {
-        if (!global.food_data || !global.food_category) {
-            return res.send([[], []]);
+        if (global.food_items && global.foodCategory) {
+            res.send([global.food_items, global.foodCategory]);
+        } else {
+            res.status(404).send("Food data not found.");
         }
-        
-        res.send([global.food_data,global.food_category])
-    } catch (error) {
+        } catch (error) {
         console.error(error.message);
-        res.send('server error');
-    }
-})
-
-module.exports = router;
+        res.status(500).send("Server Error");
+        }
+    });
+    
+    module.exports = router;
 
