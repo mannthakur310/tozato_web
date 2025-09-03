@@ -23,18 +23,30 @@ const reducer = (state, action) => {
       newArray.splice(action.index, 1);
       return newArray;
 
+    // case "UPDATE":
+    //   let arr = [...state];
+    //   arr.find((food, index) => {
+    //     if (food.id === action.id) {
+    //       arr[index] = {
+    //         ...food,
+    //         qty: parseInt(action.qty) + parseInt(food.qty),
+    //         price: action.price + food.price,
+    //       };
+    //     }
+    //   });
+    //   return arr;
+
     case "UPDATE":
-      let arr = [...state];
-      arr.find((food, index) => {
+      return state.map((food) => {
         if (food.id === action.id) {
-          arr[index] = {
+          return {
             ...food,
             qty: parseInt(action.qty) + parseInt(food.qty),
             price: action.price + food.price,
           };
         }
+        return food;
       });
-      return arr;
 
     case "DROP":
         let emtArray=[];
@@ -42,6 +54,7 @@ const reducer = (state, action) => {
 
     default:
       console.log("ERROR IN REDUCER");
+      return state; 
   }
 };
 

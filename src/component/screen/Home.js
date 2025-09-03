@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import "./Home.css";
@@ -39,7 +39,7 @@ function Home() {
     "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
   ];
 
-  const loadData = async (retryCount = 0) => {
+  const loadData = useCallback(async (retryCount = 0) => {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
@@ -75,7 +75,7 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadData();
@@ -95,7 +95,7 @@ function Home() {
     .catch(error => {
       console.error("Direct API test failed:", error);
     });
-  }, []);
+  }, [loadData]);
 
   // Auto-rotate carousel
   useEffect(() => {
