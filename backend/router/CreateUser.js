@@ -85,7 +85,7 @@ const express = require("express");
 const User = require("../model/User");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -159,7 +159,7 @@ router.post(
       };
 
       // IMPROVEMENT: Add expiration to the token
-      const authToken = jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
+      const authToken = jwt.sign(data, process.env.SECRET_KEY);
 
       return res.json({ success: true, authToken: authToken });
     } catch (error) {
