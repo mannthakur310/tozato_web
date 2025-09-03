@@ -10,13 +10,14 @@ mongo();
 console.log("Backend server starting up...");
 const allowedOrigins = [
   'http://127.0.0.1:3000/',
-   'http://localhost:3000/',  // For local development
+  'http://localhost:3000/',  // For local development
   'https://gofood-one.vercel.app/'   // IMPORTANT: Replace with your actual Vercel URL
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
+    console.log("This is the origin:", origin);
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
