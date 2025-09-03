@@ -9,7 +9,8 @@ mongo();
 
 console.log("Backend server starting up...");
 const allowedOrigins = [
-  'http://127.0.0.1:3000',   // For local development
+  'http://127.0.0.1:3000/',
+   'http://localhost:3000/',  // For local development
   'https://gofood-one.vercel.app/'   // IMPORTANT: Replace with your actual Vercel URL
 ];
 
