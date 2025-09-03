@@ -15,7 +15,7 @@ function Myorder() {
             setLoading(true);
             setError(null);
             
-            const response = await fetch("/api/myOrderDetail", {
+            const response = await fetch("https://tozato-web.onrender.com/api/myOrderDetail", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -41,7 +41,7 @@ function Myorder() {
 
     const fetchOrderStats = async () => {
         try {
-            const response = await fetch("/api/orderStats", {
+            const response = await fetch("https://tozato-web.onrender.com/api/orderStats", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

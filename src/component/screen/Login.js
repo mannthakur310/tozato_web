@@ -30,7 +30,7 @@ function Login() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/loginuser", {
+      const response = await fetch("https://tozato-web.onrender.com/api/loginuser", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -51,7 +51,7 @@ export default function Cart({ onClose }) {
   const handlePaymentSuccess = async () => {
     let userEmail = localStorage.getItem("userEmail");
     try {
-      let response = await fetch("/api/orderDetail", {
+      let response = await fetch("https://tozato-web.onrender.com/api/orderDetail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

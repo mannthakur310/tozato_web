@@ -64,7 +64,7 @@ function Signup() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/createuser", {
+      const response = await fetch("https://tozato-web.onrender.com/api/createuser", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

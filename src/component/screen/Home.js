@@ -43,7 +43,7 @@ function Home() {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
-      let response = await fetch("/api/foodData", {
+      let response = await fetch("https://tozato-web.onrender.com/api/foodData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ function Home() {
     loadData();
     
     // Test API connection
-    fetch("/api/foodData", {
+    fetch("https://tozato-web.onrender.com/api/foodData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
