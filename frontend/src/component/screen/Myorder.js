@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import { useState, useEffect, useMemo } from "react";
-import { baseurl } from "../../Urls";
 import "./Myorder.css";
 
 function Myorder() {
@@ -16,7 +15,7 @@ function Myorder() {
             setLoading(true);
             setError(null);
             
-            const response = await fetch(`${baseurl}/api/myOrderDetail`, {
+            const response = await fetch("/api/myOrderDetail", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -42,7 +41,7 @@ function Myorder() {
 
     const fetchOrderStats = async () => {
         try {
-            const response = await fetch(`${baseurl}/api/orderStats`, {
+            const response = await fetch("/api/orderStats", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

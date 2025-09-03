@@ -3,7 +3,6 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import "./Home.css";
 import Card from "../Card";
-import { baseurl } from "../../Urls";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
 
@@ -44,7 +43,7 @@ function Home() {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
-      let response = await fetch(`${baseurl}/api/foodData`, {
+      let response = await fetch("/api/foodData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +81,7 @@ function Home() {
     loadData();
     
     // Test API connection
-    fetch(`${baseurl}/api/foodData`, {
+    fetch("/api/foodData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

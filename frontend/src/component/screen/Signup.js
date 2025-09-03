@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
-import { baseurl } from "../../Urls";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Signup.css";
@@ -65,7 +64,7 @@ function Signup() {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`${baseurl}/api/createuser`, {
+      const response = await fetch("/api/createuser", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

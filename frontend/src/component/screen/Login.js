@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { baseurl } from "../../Urls";
 import { toast } from "react-toastify";
 import "./Login.css";
 
@@ -31,7 +30,7 @@ function Login() {
     setIsLoading(true);
     
     try {
-      const response = await fetch(`${baseurl}/api/loginuser`, {
+      const response = await fetch("/api/loginuser", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useCart, useDispatchCart } from "../ContextReducer";
-import { baseurl } from "../../Urls";
 import { toast } from "react-toastify";
 import PaymentModal from "../PaymentModal";
 import "./Cart.css";
@@ -52,7 +51,7 @@ export default function Cart({ onClose }) {
   const handlePaymentSuccess = async () => {
     let userEmail = localStorage.getItem("userEmail");
     try {
-      let response = await fetch(`${baseurl}/api/orderDetail`, {
+      let response = await fetch("/api/orderDetail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
