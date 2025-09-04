@@ -17,7 +17,10 @@
       "dest": "backend/index.js"
     },
     {
-      "src": "/(.*)",
+      "handle": "filesystem"
+    },
+    {
+      "src": " /(.*)",
       "dest": "/index.html"
     }
   ]

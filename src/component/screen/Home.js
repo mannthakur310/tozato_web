@@ -47,7 +47,7 @@ function Home() {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
-  let response = await fetch(`http://127.0.0.1:5000/api/foodData`, {
+  let response = await fetch(`https://tozato-web.onrender.com/api/foodData`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
