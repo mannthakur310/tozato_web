@@ -1,18 +1,25 @@
 const express = require("express");
 const router = express.Router();
 
-router.post('/foodData',(req,res)=>{
+const { getFoodData } = require('../cache/foodCache');
+
+router.post('/foodData', (req, res) => {
     try {
-        if (global.food_items && global.foodCategory) {
-            res.send([global.food_items, global.foodCategory]);
-        } else {
-            res.status(404).send("Food data not found.");
+        // db.js populates global.food_data and global.food_category
+        const { items, categories } = getFoodData();
+        if (Array.isArray(items) && Array.isArray(categories)) {
+            console.log('Serving food data from cache:', items.length, 'items;', categories.length, 'categories');
+            return res.send([items, categories]);
         }
-        } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-        }
-    });
+
+        // If globals are not yet populated, return empty arrays (200) and log a warning
+        console.warn('Cache empty — returning empty arrays.');
+        return res.send([[], []]);
+    } catch (error) {
+        console.error('Error in /foodData handler:', error);
+        return res.status(500).send('Server Error');
+    }
+});
     
     module.exports = router;
 

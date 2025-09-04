@@ -37,15 +37,16 @@ const mongoURI = process.env.mongoURI;
 
       
       
-      global.food_data= data1;
-      global.food_category=data2;
+  const { setFoodData } = require('./cache/foodCache');
+  setFoodData(data1, data2);
+  console.log('Fetched data from DB:', data1.length, 'food items,', data2.length, 'categories');
       
       
     } catch (error) {
       console.error("Error fetching data:", error);
-      // Initialize with empty arrays if there's an error
-      global.food_data = [];
-      global.food_category = [];
+  // Initialize cache with empty arrays if there's an error
+  const { setFoodData } = require('./cache/foodCache');
+  setFoodData([], []);
     } finally {
       await client.close();
     }

@@ -30,13 +30,15 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-// Test endpoint to check if global data is loaded
+// Test endpoint to check if cache data is loaded
+const { getFoodData } = require('./cache/foodCache');
 app.get('/api/test', (req, res) => {
+  const { items, categories } = getFoodData();
   res.json({
-    foodDataLength: global.food_data?.length || 0,
-    foodCategoryLength: global.food_category?.length || 0,
-    foodData: global.food_data?.slice(0, 2) || [], // First 2 items for testing
-    foodCategory: global.food_category?.slice(0, 2) || [] // First 2 items for testing
+    foodDataLength: items?.length || 0,
+    foodCategoryLength: categories?.length || 0,
+    foodData: (items || []).slice(0, 2), // First 2 items for testing
+    foodCategory: (categories || []).slice(0, 2) // First 2 items for testing
   });
 });
 

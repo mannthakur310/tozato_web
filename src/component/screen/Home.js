@@ -5,6 +5,10 @@ import "./Home.css";
 import Card from "../Card";
 import { Link } from "react-router-dom"; // Import Link for navigation
 
+// API base: set REACT_APP_API_URL in Vercel (e.g. https://tozato-web.onrender.com)
+// top of file
+// const API_BASE = process.env.REACT_APP_API_URL || 'https://tozato-web.onrender.com';
+
 
 function Home() {
   const [search, setSearch] = useState('');
@@ -43,7 +47,7 @@ function Home() {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
-      let response = await fetch("https://tozato-web.onrender.com/api/foodData", {
+  let response = await fetch(`http://127.0.0.1:3000/api/foodData`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +85,7 @@ function Home() {
     loadData();
     
     // Test API connection
-    fetch("https://tozato-web.onrender.com/api/foodData", {
+  fetch(`http://127.0.0.1:3000/api/foodData`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -130,8 +134,8 @@ function Home() {
     // More comprehensive category matching
     const itemCategory = item.CategoryName || item.categoryName || item.category || item.Category || '';
     const matchesCategory = selectedCategory === 'All' || 
-                           itemCategory.toLowerCase() === selectedCategory.toLowerCase() ||
-                           itemCategory === selectedCategory;
+    itemCategory.toLowerCase() === selectedCategory.toLowerCase() ||
+    itemCategory === selectedCategory;
     
     return matchesSearch && matchesCategory;
   });
