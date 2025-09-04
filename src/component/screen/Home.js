@@ -47,8 +47,8 @@ function Home() {
     try {
       setLoading(true);
       console.log("Loading food data... (attempt", retryCount + 1, ")");
-  let response = await fetch(`http://127.0.0.1:3000/api/foodData`, {
-        method: "POST",
+  let response = await fetch(`http://127.0.0.1:5000/api/foodData`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,18 +60,18 @@ function Home() {
       
       response = await response.json();
       console.log("Food data response:", response);
-      console.log("Food data length:", response[0]?.length);
-      console.log("Food categories length:", response[1]?.length);
+      console.log("Food data length:", response?.items);
+      console.log("Food categories length:", response?.categories);
       
       // If data is empty and we haven't retried too many times, retry after a delay
-      if ((!response[0] || response[0].length === 0) && retryCount < 3) {
+      if ((!response?.items || !response?.categories) && retryCount < 3) {
         console.log("Data is empty, retrying in 2 seconds...");
         setTimeout(() => loadData(retryCount + 1), 2000);
         return;
       }
       
-      setFoodData(response[0] || []);
-      setFoodCategory(response[1] || []);
+      setFoodData(response.items);
+      setFoodCategory(response.categories);
     } catch (error) {
       console.error("Error loading data:", error);
       setFoodData([]);
@@ -84,21 +84,21 @@ function Home() {
   useEffect(() => {
     loadData();
     
-    // Test API connection
-  fetch(`http://127.0.0.1:3000/api/foodData`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log("Direct API test - Food data:", data[0]?.length || 0, "items");
-      console.log("Direct API test - Categories:", data[1]?.length || 0, "items");
-    })
-    .catch(error => {
-      console.error("Direct API test failed:", error);
-    });
+  //   // Test API connection
+  // fetch(`http://127.0.0.1:5000/api/foodData`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log("Direct API test - Food data:", data[0]?.length || 0, "items");
+  //     console.log("Direct API test - Categories:", data[1]?.length || 0, "items");
+  //   })
+  //   .catch(error => {
+  //     console.error("Direct API test failed:", error);
+  //   });
   }, [loadData]);
 
   // Auto-rotate carousel

@@ -124,13 +124,13 @@ export default function Cart({ onClose }) {
           {data.map((food, index) => (
             <div key={index} className="cart-item animate-fade-in-up">
               <div className="cart-item-image">
-                <img 
+                {/* <img 
                   src={food.img || 'https://via.placeholder.com/100x100?text=Food'} 
                   alt={food.name}
                   onError={(e) => {
                     e.target.src = 'https://via.placeholder.com/100x100?text=Food';
                   }}
-                />
+                /> */}
               </div>
               <div className="cart-item-details">
                 <h5 className="cart-item-name">{food.name}</h5>
